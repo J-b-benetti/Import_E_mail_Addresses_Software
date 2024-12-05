@@ -3,15 +3,15 @@ import chardet
 import tkinter as tk
 from tkinter import filedialog, ttk
 
-def detect_encodage(chemin_fichier):
-    with open(chemin_fichier, 'rb') as fichier:
+def detect_encodage(file_path):
+    with open(file_path, 'rb') as fichier:
         result = chardet.detect(fichier.read(10000))
     return result['encoding']
 
-def read_csv_file(chemin_fichier):
+def read_csv_file(file_path):
     try:
-        encodage = detect_encodage(chemin_fichier)
-        with open(chemin_fichier, mode='r', encoding=encodage) as fichier:
+        encodage = detect_encodage(file_path)
+        with open(file_path, mode='r', encoding=encodage) as fichier:
             reader = csv.DictReader(fichier)
             emails = []
             for row in reader:
@@ -40,24 +40,24 @@ def read_csv_file(chemin_fichier):
 
 def display_csv_data():
     # Ouvrir une boîte de dialogue pour sélectionner le fichier
-    chemin_fichier = filedialog.askopenfilename(
+    file_path = filedialog.askopenfilename(
         title="Sélectionnez un fichier CSV",
         filetypes=[("Fichiers CSV", "*.csv")]
     )
     
-    if not chemin_fichier:
+    if not file_path:
         return  # Si aucun fichier n'est sélectionné
 
     # Lire les données du fichier CSV
-    donnees = read_csv_file(chemin_fichier)
+    donnees = read_csv_file(file_path)
     
-    # Effacer les données actuelles du tableau
-    for item in tableau.get_children():
-        tableau.delete(item)
+    # Effacer les données actuelles du file_table
+    for item in file_table.get_children():
+        file_table.delete(item)
     
-    # Ajouter les nouvelles données au tableau
+    # Ajouter les nouvelles données au file_table
     for ligne in donnees:
-        tableau.insert("", "end", values=(ligne["Prénom"], ligne["Nom"], ligne["E-mail principal"], ligne["E-mail secondaire"], ligne["Ville"], ligne["Tél. personnel"], ligne["Profession"]))
+        file_table.insert("", "end", values=(ligne["Prénom"], ligne["Nom"], ligne["E-mail principal"], ligne["E-mail secondaire"], ligne["Ville"], ligne["Tél. personnel"], ligne["Profession"]))
 
 # Interface graphique
 fenetre = tk.Tk()
@@ -67,16 +67,16 @@ fenetre.title("Affichage des adresses e-mail")
 bouton_charger = tk.Button(fenetre, text="Charger un fichier CSV", bg="#b36b66", height=2, relief="groove", justify="center", border=2, command=display_csv_data)
 bouton_charger.pack(pady=10)
 
-# Tableau pour afficher les données
+# file_table pour afficher les données
 colonnes = ("Prénom", "Nom", "E-mail principal", "E-mail secondaire", "Ville", "Tél. personnel", "Profession")
-tableau = ttk.Treeview(fenetre, columns=colonnes, show="headings")
+file_table = ttk.Treeview(fenetre, columns=colonnes, show="headings")
 
 # Configurer les en-têtes
 for col in colonnes:
-    tableau.heading(col, text=col)
-    tableau.column(col, width=150)
+    file_table.heading(col, text=col)
+    file_table.column(col, width=150)
 
-tableau.pack(expand=True, fill="both")
+file_table.pack(expand=True, fill="both")
 
 # Lancer l'interface graphique
 fenetre.mainloop()
