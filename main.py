@@ -1,5 +1,5 @@
 import csv
-import chardet
+import chardet # for encoded data
 import tkinter as tk
 from tkinter import filedialog, ttk
 
@@ -41,8 +41,8 @@ def read_csv_file(file_path):
 def display_csv_data():
     # Ouvrir une boîte de dialogue pour sélectionner le fichier
     file_path = filedialog.askopenfilename(
-        title="Sélectionnez un fichier CSV",
-        filetypes=[("Fichiers CSV", "*.csv")]
+        title = "Sélectionnez un fichier CSV",
+        filetypes = [("Fichiers CSV", "*.csv")]
     )
     
     if not file_path:
